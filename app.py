@@ -53,8 +53,16 @@ st.markdown("### Upload a Sale Deed to check for missing history.")
 
 with st.sidebar:
     st.success("✅ System Ready")
-    api_key = st.text_input("Enter Gemini API Key", type="password")
-    st.info("Your key is never stored.")
+    
+    # 1. Try to find key in Cloud Secrets (Best for Live App)
+    if "GOOGLE_API_KEY" in st.secrets:
+        api_key = st.secrets["GOOGLE_API_KEY"]
+        st.success("🔐 API Key Loaded Automatically")
+    
+    # 2. If no cloud key, ask user (Best for Local Testing)
+    else:
+        api_key = st.text_input("Enter Gemini API Key", type="password")
+        st.info("Enter key manually for local testing.")
 
 uploaded_file = st.file_uploader("Upload Property Document (PDF)", type=["pdf"])
 
